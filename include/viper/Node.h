@@ -1,4 +1,4 @@
-/**
+ /**
  * Copyright (c) 2023 LXRobotics GmbH.
  * Author: Alexander Entinger <alexander.entinger@lxrobotics.com>
  * Contributors: https://github.com/107-systems/viper/graphs/contributors.
@@ -90,10 +90,6 @@ private:
   static uint16_t constexpr SETPOINT_VELOCITY_ID = 113;
   cyphal::Publisher<zubax::primitive::real16::Vector4_1_0> _setpoint_velocity_pub;
 
-
- 
-  static uint16_t constexpr SETPOINT_VELOCITY_ID = 113;
-  cyphal::Publisher<zubax::primitive::real16::Vector4_1_0> _setpoint_velocity_pub;
 
   static std::chrono::milliseconds constexpr CTRL_LOOP_RATE{10};
   rclcpp::TimerBase::SharedPtr _ctrl_loop_timer;
