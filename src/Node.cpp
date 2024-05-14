@@ -273,22 +273,41 @@ void Node::init_imu_sub()
 
 void Node::ctrl_loop()
 {
-  /* TODO: implement me ... */
+  // Check if IMU data is available
+  if (!_imu_data.orientation_covariance.empty())
+  {
+    // Log the x orientation data
+    RCLCPP_INFO(get_logger(), "IMU x orientation: %f", _imu_data.orientation.x);
+    
+    // Check if x orientation data exceeds 0.2
+    if (_imu_data.orientation.x > 0.2)
+    {
+      // Call motor
+      zubax::primitive::real16::Vector4_1_0 const motor_msg{100.0, 100.0, 100.0, 10.0};
+      _setpoint_velocity_pub->publish(motor_msg);
+    }
+    else
+    {
+      // Do something else if x orientation data does not exceed 0.2
+      // For example, stop the motor
+      zubax::primitive::real16::Vector4_1_0 const motor_msg{0.0, 0.0, 0.0, 0.0};
+      _setpoint_velocity_pub->publish(motor_msg);
+    }
+  }
+  else
+  {
+    RCLCPP_WARN(get_logger(), "No IMU data available.");
+  }
+
+  // Publish demo message
   static int8_t demo_cnt = 0;
   uavcan::primitive::scalar::Integer8_1_0 const demo_msg{demo_cnt};
   _cyphal_demo_pub->publish(demo_msg);
-  
 
-  zubax::primitive::real16::Vector4_1_0 const motor_msg{10.0, 100.0, 10.0, 10.0};
-  _setpoint_velocity_pub->publish(motor_msg);
-
-  
-
-
-//RCLCPP_INFO(get_logger(), "%s inusha bee.", get_name());/
-
+  // Increment demo counter
   demo_cnt++;
 }
+
 
 /**************************************************************************************
  * NAMESPACE
