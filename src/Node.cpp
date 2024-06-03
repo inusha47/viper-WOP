@@ -85,7 +85,11 @@ Node::Node()
 
   _cyphal_demo_pub = _node_hdl.create_publisher<uavcan::primitive::scalar::Integer8_1_0>(CYPHAL_DEMO_PORT_ID, 1*1000*1000UL);
 
-  _setpoint_velocity_pub = _node_hdl.create_publisher<zubax::primitive::real16::Vector4_1_0>(SETPOINT_VELOCITY_ID, 1*1000*1000UL);
+  _setpoint_velocity_pub_1 = _node_hdl.create_publisher<zubax::primitive::real16::Vector4_1_0>(SETPOINT_VELOCITY_ID_1, 1*1000*1000UL);
+  _setpoint_velocity_pub_2 = _node_hdl.create_publisher<zubax::primitive::real16::Vector4_1_0>(SETPOINT_VELOCITY_ID_2, 1*1000*1000UL);
+  _setpoint_velocity_pub_3 = _node_hdl.create_publisher<zubax::primitive::real16::Vector4_1_0>(SETPOINT_VELOCITY_ID_3, 1*1000*1000UL);
+  _setpoint_velocity_pub_4 = _node_hdl.create_publisher<zubax::primitive::real16::Vector4_1_0>(SETPOINT_VELOCITY_ID_4, 1*1000*1000UL);
+
 
   RCLCPP_INFO(get_logger(), "%s init complete.", get_name());
 }
@@ -283,15 +287,59 @@ void Node::ctrl_loop()
     if (_imu_data.orientation.x > 0.2)
     {
       // Call motor
-      zubax::primitive::real16::Vector4_1_0 const motor_msg{100.0, 100.0, 100.0, 10.0};
-      _setpoint_velocity_pub->publish(motor_msg);
+      zubax::primitive::real16::Vector4_1_0 const motor_msg{150.0, 100.0, 100.0, 10.0};
+      _setpoint_velocity_pub_1->publish(motor_msg);
     }
     else
     {
       // Do something else if x orientation data does not exceed 0.2
       // For example, stop the motor
-      zubax::primitive::real16::Vector4_1_0 const motor_msg{0.0, 0.0, 0.0, 0.0};
-      _setpoint_velocity_pub->publish(motor_msg);
+      zubax::primitive::real16::Vector4_1_0 const motor_msg{10.0, 100.0, 10.0, 10.0};
+      _setpoint_velocity_pub_1->publish(motor_msg);
+    }
+
+    if (_imu_data.orientation.y > 0.2)
+    {
+      // Call motor
+      zubax::primitive::real16::Vector4_1_0 const motor_msg{150.0, 100.0, 100.0, 10.0};
+      _setpoint_velocity_pub_4->publish(motor_msg);
+    }
+    else
+    {
+      // Do something else if x orientation data does not exceed 0.2
+      // For example, stop the motor
+      zubax::primitive::real16::Vector4_1_0 const motor_msg{10.0, 100.0, 10.0, 10.0};
+      _setpoint_velocity_pub_4->publish(motor_msg);
+    }
+
+    if (_imu_data.orientation.z < 0.6)
+    {
+      // Call motor
+      zubax::primitive::real16::Vector4_1_0 const motor_msg{150.0, 100.0, 100.0, 10.0};
+      _setpoint_velocity_pub_2->publish(motor_msg);
+    }
+    else
+    {
+      // Do something else if x orientation data does not exceed 0.2
+      // For example, stop the motor
+      zubax::primitive::real16::Vector4_1_0 const motor_msg{10.0, 100.0, 10.0, 10.0};
+      _setpoint_velocity_pub_2->publish(motor_msg);
+
+    if (_imu_data.orientation.w < 0.65)
+    {
+      // Call motor
+      zubax::primitive::real16::Vector4_1_0 const motor_msg{150.0, 100.0, 100.0, 10.0};
+      _setpoint_velocity_pub_3->publish(motor_msg);
+    }
+    else
+    {
+      // Do something else if x orientation data does not exceed 0.2
+      // For example, stop the motor
+      zubax::primitive::real16::Vector4_1_0 const motor_msg{10.0, 100.0, 10.0, 10.0};
+      _setpoint_velocity_pub_3->publish(motor_msg);
+    }
+
+
     }
   }
   else
